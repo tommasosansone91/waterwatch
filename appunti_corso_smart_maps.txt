@@ -1,0 +1,77 @@
+
+# install postgres db
+
+# devi essere fuori dal virtual environment
+
+sudo apt update
+
+sudo apt install postgresql postgresql-contrib
+
+# activate
+
+sudo systemctl start postgresql.service
+
+
+# configurazioni per il corso
+
+sudo apt install postgis postgresql-14-postgis-3
+
+tommaso@tommaso-VirtualBox02:~/tommaso03/coding_projects/corsi_udemy/create-smart-maps-in-python-and-leaflet$ sudo -i -u postgres
+postgres@tommaso-VirtualBox02:~$ createdb cptwater
+postgres@tommaso-VirtualBox02:~$ createuser -s waterwatch -P
+Enter password for new role: 
+Enter it again: 
+postgres@tommaso-VirtualBox02:~$ psql cptwater
+psql (14.5 (Ubuntu 14.5-0ubuntu0.22.04.1))
+Type "help" for help.
+
+cptwater=# grant all privileges on database cptwater to waterwatch;
+GRANT
+cptwater=# CREATE EXTENSION postgis;
+CREATE EXTENSION
+cptwater=# CREATE EXTENSION postgis_topology;
+CREATE EXTENSION
+
+
+cptwater=# SELECT PostGIS_Version();
+            postgis_version            
+---------------------------------------
+ 3.2 USE_GEOS=1 USE_PROJ=1 USE_STATS=1
+(1 row)
+
+# attiva il venv
+
+source venv_smart_maps/bin/activate
+
+# nel virtualenv c'è già pip
+# per vedere i package installati nel venv correntemente attivo
+pip list
+
+pip install django==4.0
+
+
+(venv_smart_maps) tommaso@tommaso-VirtualBox02:~/tommaso03/coding_projects/corsi_udemy/create-smart-maps-in-python-and-leaflet$ django-admin startproject waterwatch
+(venv_smart_maps) tommaso@tommaso-VirtualBox02:~/tommaso03/coding_projects/corsi_udemy/create-smart-maps-in-python-and-leaflet$ ll
+total 40
+drwxrwxr-x 5 tommaso tommaso 4096 nov 28 02:08 ./
+drwxrwxr-x 8 tommaso tommaso 4096 nov 28 00:25 ../
+-rw-rw-r-- 1 tommaso tommaso 1386 nov 11 01:37 aggiungere_nuova_chiave_SSH.txt
+-rw-rw-r-- 1 tommaso tommaso    0 nov 28 02:02 appunti_corso_smart_maps.txt
+-rw-rw-r-- 1 tommaso tommaso  298 nov 11 01:35 automate_git_push_with_token.txt
+-rw-rw-r-- 1 tommaso tommaso  388 nov 28 00:52 cheats_sheets_for_linux.txt
+-rw-rw-r-- 1 tommaso tommaso 2756 nov 28 02:01 configurare_postgresql.txt
+drwxrwxr-x 3 tommaso tommaso 4096 nov 28 00:50 .idea/
+-rw-rw-r-- 1 tommaso tommaso   43 nov 28 02:06 requirements.txt
+drwxrwxr-x 4 tommaso tommaso 4096 nov 28 00:52 venv_smart_maps/
+drwxrwxr-x 3 tommaso tommaso 4096 nov 28 02:08 waterwatch/
+
+
+(venv_smart_maps) tommaso@tommaso-VirtualBox02:~/tommaso03/coding_projects/corsi_udemy/create-smart-maps-in-python-and-leaflet$ cd waterwatch/
+(venv_smart_maps) tommaso@tommaso-VirtualBox02:~/tommaso03/coding_projects/corsi_udemy/create-smart-maps-in-python-and-leaflet/waterwatch$ python manage.py startapp waterwatchapp
+
+
+percorso interprete pycharm
+/home/tommaso/tommaso03/coding_projects/corsi_udemy/create-smart-maps-in-python-and-leaflet/venv_smart_maps/lib/python
+
+quello di isstema è usr/bin/python3
+ho ricopiato il path bin/python3

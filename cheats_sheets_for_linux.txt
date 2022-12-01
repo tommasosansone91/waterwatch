@@ -14,3 +14,5 @@ source venv_smart_maps/bin/activate
 pip list
 
 
+
+

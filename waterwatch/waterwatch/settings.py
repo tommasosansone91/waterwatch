@@ -98,7 +98,7 @@ DATABASES = {
 }
 
 SERIALIZATION_MODULES = {  # added
-    'geojson': 'djgeogeson.serializer'
+    'geojson': 'djgeojson.serializers'
 }
 
 # Password validation

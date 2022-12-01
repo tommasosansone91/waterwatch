@@ -206,3 +206,12 @@ for index, row in df_excelReader.iterrows():
                      geom=Point(Longitude, Latitude)
                      ).save()
 
+pip install django-geojson
+
+instaòòed apps
+    'djgeojson',
+
+    in settings
+SERIALIZATION_MODULES = {
+    'geojson': 'djgeogeson.serializer'
+}

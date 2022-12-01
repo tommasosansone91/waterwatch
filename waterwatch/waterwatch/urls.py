@@ -13,9 +13,22 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path
 
+from django.urls import re_path
+import django.contrib.auth.views
+
+from waterwatchapp.models import WaterConsumption
+
+import waterwatchapp.views
+from waterwatchapp.views import waterconsumption_dataset, top10_consumers
+
+
 urlpatterns = [
+    re_path(r'^$', waterwatchapp.views.home, name='home'),
+    re_path(r'^waterconsumption_data/$', waterconsumption_dataset, name='waterconsumption'),
+    re_path(r'^top10_consumers/$', top10_consumers, name='top10consumers'),
     path('admin/', admin.site.urls),
 ]

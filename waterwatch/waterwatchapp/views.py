@@ -9,10 +9,13 @@ from django.template.context import Context
 import pandas as pd
 
 # Create your views here.
+
+# make data available in json via serialization - API? 
 def waterconsumption_dataset(request):
     waterconsumption = serialize('geojson', WaterConsumption.objects.all())
     return HttpResponse(waterconsumption, content_type='json')
 
+# make data available in json via serialization - API?
 def top10_consumers(request):
     #data = WaterConsumption.objects.only('Suburb').order_by('-AvgMonthlyKL')[:20]
     df_top10 = pd.DataFrame.from_records(WaterConsumption.objects.all().values())

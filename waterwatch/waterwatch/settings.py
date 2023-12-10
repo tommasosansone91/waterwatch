@@ -19,6 +19,7 @@ import posixpath
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# /home/tommaso/tommaso03/coding_projects/corsi_udemy/create-smart-maps-in-python-and-leaflet/waterwatch
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
@@ -140,8 +141,11 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # change made by the teacher but not recommended with django's new syntax
 # STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
+# /home/tommaso/tommaso03/coding_projects/corsi_udemy/create-smart-maps-in-python-and-leaflet/waterwatch/static/
+
 
 LEAFLET_CONFIG = {
+
     'DEFAULT_CENTER': (-33.925, 18.625),
     'DEFAULT_ZOOM': 10,
     'MAX_ZOOM': 20,

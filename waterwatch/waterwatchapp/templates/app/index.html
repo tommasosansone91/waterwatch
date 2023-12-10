@@ -6,6 +6,10 @@
 
 {% block content %}
 
+ <!-- just a try. non funziona. con il cambio stati root staticfiles dir funziona -->
+{% load static %}
+<img src="{% static 'app/images/favicon/favicon_waterwatch_v1.png' %}" alt="Girl in a jacket">
+
 {% leaflet_map "main" callback="window.main_map_init" %}
 
 <style>
@@ -129,6 +133,7 @@
       }
     }).addTo(map);
 
+    // custom function to claculate the radius
     function calcPropRadius(avgmonthlykl) {
             var scaleFactor = 90;//50; //16;
             var area = avgmonthlykl * scaleFactor;

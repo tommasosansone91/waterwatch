@@ -90,13 +90,18 @@ DATABASES = {
 
     'default': {  # changed
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'cptwater',
-        'USER': 'waterwatch',
-        'PASSWORD': 'waterwatch',
+        'NAME': 'waterwatch',
+        'USER': 'waterwatch_main',
+        'PASSWORD': 'wwmain',
         'HOST': 'localhost',
     }
 
 }
+
+# dev machine old configs
+        # 'NAME': 'cptwater',
+        # 'USER': 'waterwatch',
+        # 'PASSWORD': 'waterwatch',
 
 SERIALIZATION_MODULES = {  # added
     'geojson': 'djgeojson.serializers'

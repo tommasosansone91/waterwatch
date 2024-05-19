@@ -1,0 +1,334 @@
+{% extends "app/layout.html" %}
+
+{% load leaflet_tags %}
+
+{% load geojson_tags %}
+
+{% block content %}
+
+{% leaflet_map "main" callback="window.main_map_init" %}
+
+<style>
+.leaflet-container {  /* all maps */
+    width:  100%;
+    /* height: calc(100vh - 60px); */
+    height: 100vh;
+}
+
+.legend, .temporal-legend {
+    padding: 6px 10px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: rgba(0,0,0,0.85);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    color:whitesmoke;
+}
+
+#legendTitle {
+    text-align: center;
+    margin-bottom: 15px;
+    color: whitesmoke;
+    /* font-variant: small-caps; */
+    font-weight: bold;
+}
+
+.symbolsContainer {
+    float: left;
+    margin-left: 50px;
+}
+
+.legendCircle {
+    border-radius:50%;
+    border: 1px solid #537898;
+    background: rgba(0,128,128,0.5);
+    display: inline-block;
+}
+
+.legendValue {
+    position: absolute;
+    right: 12px;
+    color:whitesmoke;
+    font-size:10pt;
+    text-align:center;
+    font-weight: bold;
+}
+
+.info {
+    width:30vw;
+    height:48vh;
+    /* width:20vw; */
+    /* height:300px; */
+    padding: 6px 10px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: rgba(0,0,0,0.85);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    color:whitesmoke;
+    /* max-width:100%;
+    max-height:100%; */
+}
+
+.info h6 {
+    margin: 0 0 5px;
+    color: #777;
+    text-align: center;
+    /* margin-bottom: 15px; */
+    color: whitesmoke;
+    /* font-variant: small-caps; */
+    font-weight: bold;
+}
+
+.info #horBarChart {
+    width: 100% !important;
+    max-width: 800px;
+    /* height:inherit; */
+}
+
+.leaflet-control-layers {
+    float:right;
+    top:500px;
+    right:0;
+    /* margin-left:-200px; */
+    position:absolute;
+    background: rgba(0,0,0,0.85);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    color:whitesmoke;
+}
+</style>
+
+<script type="text/javascript">
+  function main_map_init(map, options) {
+
+    var dataset = new L.GeoJSON.AJAX("{% url 'waterconsumption' %}", {
+      pointToLayer: function(feature, latlng) {
+        return L.circleMarker(latlng, {
+          fillColor: 'teal',
+          color: '#537898',
+          weight: 1,
+          fillOpacity: 0.5
+        }).on({
+          mouseover: function(e) {
+            this.setStyle({color: 'yellow'});
+          },
+
+          mouseout: function(e) {
+            this.setStyle({color: '#537898'});
+          }
+        });
+      },
+
+      onEachFeature: function(feature, layer) {
+        var radius = calcPropRadius(feature.properties.AvgMonthlyKL);
+
+        var popupText = "<strong>" + feature.properties.Suburb + "</strong>";
+
+        layer.setRadius(radius);
+
+        layer.bindPopup(popupText, { offset: new L.Point(0, -radius) });
+      }
+    }).addTo(map);
+
+    function calcPropRadius(avgmonthlykl) {
+            var scaleFactor = 90;//50; //16;
+            var area = avgmonthlykl * scaleFactor;
+            return Math.sqrt(area/Math.PI)*2;
+    }
+
+    var button = new L.Control.Button('Menu', {
+        toggleButton: 'active',
+        position: 'topleft',
+    });
+
+    button.addTo(map);
+
+    button.on('click', function() {
+        sidebar.toggle();
+    });
+
+
+    var waterBtn = new L.Control.Button('Water', {
+        toggleButton: 'active',
+        position: 'topleft',
+    });
+
+    waterBtn.addTo(map);
+
+    waterBtn.on('click', function() {
+        rightSidebar.toggle();
+    });
+
+    var rightSidebar = L.control.sidebar('sidebar-right', {
+        closeButton: true,
+        position: 'right'
+    }).addTo(map);
+
+    var sidebar = L.control.sidebar('sidebar', {
+        closeButton: true,
+        position: 'left'
+    }).addTo(map);
+
+    createLegend();
+
+    function createLegend() {
+      var legend = L.control({position: 'bottomright'});
+      legend.onAdd = function(map) {
+        var legendContainer = L.DomUtil.create('div', 'legend');
+
+        var symbolsContainer = L.DomUtil.create('div', 'symbolsContainer');
+
+        var classes = [4, 10, 20];
+
+        var legendCircle;
+
+        var lastRadius = 0;
+
+        var margin;
+
+        $(legendContainer).append("<h6 id='legendTitle'>Average in Kilolitres (KL)</h6>");
+
+        for (var i = 0; i <= classes.length-1; i++) {
+          legendCircle = L.DomUtil.create("div", "legendCircle");
+
+          currentRadius = calcPropRadius(classes[i]);
+
+          margin = -currentRadius - lastRadius - 2;
+
+          $(legendCircle).attr("style", "width: " + currentRadius*2 +
+                               "px; height: " + currentRadius*2 +
+                               "px; margin-left: " + margin + "px" );
+
+           if (classes[i] == 20) {
+               $(legendCircle).append("<span class='legendValue'>" + '11 - ' + classes[i] + '+' + "</span>");
+           } else if (classes[i] == 10) {
+               $(legendCircle).append("<span class='legendValue'>" + '5 - ' + classes[i] + "</span>");
+           } else if (classes[i] == 4) {
+               $(legendCircle).append("<span class='legendValue'>" + '0 - ' + classes[i] + "</span>");
+           }
+
+          $(symbolsContainer).append(legendCircle);
+
+          lastRadius = currentRadius;
+
+        }
+
+        $(legendContainer).append(symbolsContainer);
+
+        return legendContainer;
+
+      };
+
+      legend.addTo(map);
+    }
+
+    barChartLegend();
+
+    function barChartLegend() {
+
+      var info = L.control({position: 'topright'});
+      info.onAdd = function(map) {
+        var div = L.DomUtil.create('div', 'info');
+        div.innerHTML += '<h6>Top 10 Consumers (KL)</h6>';
+        div.innerHTML += '<canvas id="horBarChart"></canvas>';
+
+        return div;
+      };
+
+      info.addTo(map);
+    }
+
+
+    displayhorBarChart();
+
+    function displayhorBarChart() {
+
+      var x_labels = [];
+      var y_data = [];
+
+      $.ajax({
+        url: "/top10_consumers",
+        cache:"false",
+        dataType: "text",
+        type: "GET",
+
+        success: function(data) {
+          var obj = JSON.parse(data);
+
+          obj.forEach(o => {
+            x_labels.push(o.Suburb);
+          });
+
+          var label_array = Object.values(x_labels);
+
+          obj.forEach(o => {
+            y_data.push(o.AvgMonthlyKL);
+          });
+
+          var data_array = Object.values(y_data);
+
+          var ctx = document.getElementById("horBarChart").getContext("2d");
+          var canvas = document.getElementById("horBarChart");
+          var parent = document.getElementById("info");
+
+          var horBarChart = new Chart(ctx, {
+            type: 'horizontalBar',
+            data: {
+              labels: label_array,
+              datasets: [{
+                label: 'water',
+                backgroundColor: "rgba(0, 128, 128, 0.6)",
+                borderColor: "rgba(0, 128, 128, 1)",
+                data: data_array
+              }]
+            },
+
+            options: {
+              scaleShowValues: true,
+              scales: {
+                yAxes: [{
+                  ticks: {
+                    beginAtZero: true
+                  }
+                }],
+                xAxes: [{
+                  ticks: {
+                    autoSkip: false,
+                    beginAtZero: true
+                  }
+                }]
+              }
+            }
+          });
+      },
+
+      error: function(data) {
+        alert('error; '+ eval(error));
+      }
+    });
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }
+</script>
+
+{% endblock %}

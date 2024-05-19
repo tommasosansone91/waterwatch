@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+  {% load leaflet_tags %}
+  {% load geojson_tags %}
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>{{ title }} - WaterWatch</title>
+    <meta name="description" content="EBISYS - WaterWatch">
+    {% load staticfiles %}
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Bootstrap core css -->
+    <link rel="stylesheet" href="{% static 'app/mdb/css/bootstrap.min.css' %}">
+    <!-- Material Design Bootstrap -->
+    <link rel="stylesheet" href="{% static 'app/mdb/css/mdb.min.css' %}">
+    <!-- Your custom styles (optional) -->
+    <link rel="stylesheet" href="{% static 'app/mdb/css/style.css' %}">
+    <!-- L.Control.Sidebar -->
+    <link rel="stylesheet" href="{% static 'app/content/css/L.Control.Sidebar.css' %}">
+
+    <link rel="apple-touch-icon" href="apple-icon.png">
+    <link rel="shortcut icon" href="favicon.ico">
+
+    {% leaflet_css %}
+
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
+
+    <style>
+      /* custom checkbox, radio, style */
+      .styled-input-single {
+          position: relative;
+          /* padding: 20px 0 20px 40px; */
+          padding-left: 25px;
+          text-align: left;
+      }
+      .styled-input-single label {
+          cursor: pointer;
+      }
+      .styled-input-single label:before, .styled-input-single label:after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          border-radius: 50%;
+      }
+      .styled-input-single label:before {
+          left: 0;
+          width: 18px;
+          height: 18px;
+          margin: -13px 0 0;
+          background: #f7f7f7;
+          -webkit-box-shadow: 0 0 1px grey;
+                  box-shadow: 0 0 1px grey;
+      }
+      .styled-input-single label:after {
+          left: 3px;
+          width: 12px;
+          height: 12px;
+          margin: -10px 0 0;
+          opacity: 0;
+          background: #37b2b2;
+          -webkit-transform: translate3d(-40px, 0, 0) scale(0.5);
+                  transform: translate3d(-40px, 0, 0) scale(0.5);
+          -webkit-transition: opacity 0.25s ease-in-out, -webkit-transform 0.25s ease-in-out;
+          transition: opacity 0.25s ease-in-out, -webkit-transform 0.25s ease-in-out;
+          transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
+          transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out, -webkit-transform 0.25s ease-in-out;
+      }
+      .styled-input-single input[type="radio"],
+      .styled-input-single input[type="checkbox"] {
+          position: absolute;
+          top: 0;
+          left: -9999px;
+          visibility: hidden;
+      }
+      .styled-input-single input[type="radio"]:checked + label:after,
+      .styled-input-single input[type="checkbox"]:checked + label:after {
+          -webkit-transform: translate3d(0, 0, 0);
+                  transform: translate3d(0, 0, 0);
+          opacity: 1;
+      }
+      .styled-input--square label:before, .styled-input--square label:after {
+          border-radius: 0;
+      }
+      .styled-input--rounded label:before {
+          border-radius: 10px;
+      }
+      .styled-input--rounded label:after {
+          border-radius: 6px;
+      }
+      .styled-input--diamond .styled-input-single {
+          padding-left: 45px;
+      }
+      .styled-input--diamond label:before, .styled-input--diamond label:after {
+          border-radius: 0;
+      }
+      .styled-input--diamond label:before {
+          -webkit-transform: rotate(45deg);
+                  transform: rotate(45deg);
+      }
+      .styled-input--diamond input[type="radio"]:checked + label:after,
+      .styled-input--diamond input[type="checkbox"]:checked + label:after {
+          -webkit-transform: rotate(45deg);
+                  transform: rotate(45deg);
+          opacity: 1;
+      }
+    </style>
+
+
+  </head>
+
+  <body>
+    <!-- sidebar -->
+    <div id="sidebar">
+      <!-- sidebar heading -->
+      <div id="sidebar-heading" style="margin:5px;">
+        <h4 style="display:inline;"><b style="color:dodgerblue;">WATER</b>WATCH</h4>
+      </div>
+      <br>
+      <!-- sidebar body -->
+      <div id="sidebar-body" style="margin:5px; color:whitesmoke;">
+        <h6><i class="fa fa-globe" aria-hidden="true"></i> Layers</h6><br>
+        <div class="styled-input-container">
+            <div class="styled-input-single">
+                <input type="radio" name="fieldset-1" id="osm-radio" /><label for="osm-radio">Open Street Map</label>
+            </div>
+            <div class="styled-input-single">
+                <input type="radio" name="fieldset-1" id="terrain-radio" /><label for="terrain-radio">Terrain</label>
+            </div>
+        </div>
+        <hr style="background:whitesmoke;">
+        <h6><i class="fa fa-map-marker" aria-hidden="true"></i> Objects</h6><br>
+        <div class="styled-input-container styled-input--square">
+            <div class="styled-input-single">
+                <input type="checkbox" name="fieldset-5" id="suburb-chk" /><label for="suburb-chk">Suburbs</label>
+            </div>
+            <div class="styled-input-single">
+                <input type="checkbox" name="fieldset-5" id="damns-chk" /><label for="damns-chk">Damns</label>
+            </div>
+        </div>
+        <hr style="background:whitesmoke;">
+        <h6><i class="fa fa-bar-chart" aria-hidden="true"></i> Data</h6><br>
+        <div class="styled-input-container">
+            <div class="styled-input-single">
+                <input type="radio" name="fieldset-3" id="water-radio" /><label for="water-radio">Water Usage</label>
+            </div>
+            <div class="styled-input-single">
+                <input type="radio" name="fieldset-3" id="damn-radio" /><label for="damn-radio">Damn Levels</label>
+            </div>
+        </div>
+        <hr style="background:whitesmoke;">
+      </div>
+    </div>
+
+    <div id="sidebar-right">
+      <div id="sidebar-heading"  style="margin:5px;">
+        <h4 style="display:inline;"><b style="color:dodgerblue;">WATER</b> USED</h4>
+      </div>
+    </div>
+
+    {% block content %}{% endblock %}
+
+    <!-- scripts -->
+
+    <!-- JQuery -->
+    <script src="{% static 'app/mdb/js/jquery-3.2.1.min.js' %}"></script>
+    <!-- Bootstrap tooltips -->
+    <script src="{% static 'app/mdb/js/popper.min.js' %}"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script src="{% static 'app/mdb/js/bootstrap.min.js' %}"></script>
+    <!-- MDB core JavaScript -->
+    <script src="{% static 'app/mdb/js/mdb.min.js' %}"></script>
+    <!--Initializations-->
+    <script>
+
+    </script>
+
+    {% leaflet_js %}
+    <script src="{% static 'app/scripts/js/Chart.js' %}"></script>
+    <script src="{% static 'app/scripts/js/leaflet.ajax.min.js' %}"></script>
+    <script src="{% static 'app/scripts/js/L.Control.Sidebar.js' %}"></script>
+    <script src="{% static 'app/scripts/js/leaflet-button.js' %}"></script>
+
+    {% block scripts %}{% endblock %}
+
+  </body>
+
+
+
+
+
+
+
+
+
+
+</html>

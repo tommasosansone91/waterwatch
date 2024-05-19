@@ -1,0 +1,16 @@
+dj-database-url==0.5.0
+dj-static==0.0.6
+Django==2.0.5
+django-leaflet==0.24.0
+django-toolbelt==0.0.1
+geojson==2.4.0
+gunicorn==19.8.1
+numpy==1.14.5
+pandas==0.23.3
+pkg-resources==0.0.0
+psycopg2==2.7.4
+python-dateutil==2.7.3
+pytz==2018.4
+six==1.11.0
+static3==0.7.0
+xlrd==1.1.0

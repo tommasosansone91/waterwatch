@@ -1,0 +1,18 @@
+### basic commands to setup the environment to host an app in linux
+
+# install virtualenv in linux
+sudo apt install python3.10-venv
+
+# create virtualenv (path is absolute and must be specified))
+virtualenv venv_smart_maps
+
+# activate virtualenv
+source venv_smart_maps/bin/activate
+
+# nel virtualenv c'è già pip
+# per vedere i package installati nel venv correntemente attivo
+pip list
+
+
+
+

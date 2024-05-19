@@ -1,0 +1,100 @@
+
+# install
+
+# devi essere fuori dal virtual environment
+
+sudo apt update
+
+sudo apt install postgresql postgresql-contrib
+
+# activate
+
+sudo systemctl start postgresql.service
+
+-----------------
+
+# configure
+
+sudo -i -u postgres
+
+postgres@tommaso-VirtualBox02:~$ createuser --interactive
+Enter name of role to add: provapostgres
+Shall the new role be a superuser? (y/n) y
+
+postgres@tommaso-VirtualBox02:~$ createdb provapostgres
+
+tommaso@tommaso-VirtualBox02:~/tommaso03/coding_projects/corsi_udemy/create-smart-maps-in-python-and-leaflet$ sudo adduser provapostgres
+Adding user `provapostgres' ...
+Adding new group `provapostgres' (1002) ...
+Adding new user `provapostgres' (1001) with group `provapostgres' ...
+Creating home directory `/home/provapostgres' ...
+Copying files from `/etc/skel' ...
+New password: provapostgres
+BAD PASSWORD: The password fails the dictionary check - it is based on a dictionary word
+Retype new password: 
+passwd: password updated successfully
+Changing the user information for provapostgres
+Enter the new value, or press ENTER for the default
+	Full Name []: provapostgres
+	Room Number []: 
+	Work Phone []: 
+	Home Phone []: 
+	Other []: 
+Is the information correct? [Y/n] Y
+
+
+-----------------
+
+# drop unwanted db, user
+
+postgres@tommaso-VirtualBox02:~$ dropdb mydb1
+postgres@tommaso-VirtualBox02:~$ dropuser postgres_superuser_1
+
+-------------------
+
+# login into user that has access to db
+
+sudo -i -u provapostgres
+
+tommaso@tommaso-VirtualBox02:~/tommaso03/coding_projects/corsi_udemy/create-smart-maps-in-python-and-leaflet$ sudo -i -u provapostgres
+provapostgres@tommaso-VirtualBox02:~$
+
+
+provapostgres@tommaso-VirtualBox02:~$ psql provapostgres
+psql (14.5 (Ubuntu 14.5-0ubuntu0.22.04.1))
+Type "help" for help.
+
+provapostgres=# \conninfo
+You are connected to database "provapostgres" as user "provapostgres" via socket in "/var/run/postgresql" at port "5432".
+
+-----------------
+
+# configurazioni per il corso
+
+sudo apt install postgis postgresql-14-postgis-3
+
+tommaso@tommaso-VirtualBox02:~/tommaso03/coding_projects/corsi_udemy/create-smart-maps-in-python-and-leaflet$ sudo -i -u postgres
+postgres@tommaso-VirtualBox02:~$ createdb cptwater
+postgres@tommaso-VirtualBox02:~$ createuser -s waterwatch -P
+Enter password for new role: 
+Enter it again: 
+postgres@tommaso-VirtualBox02:~$ psql cptwater
+psql (14.5 (Ubuntu 14.5-0ubuntu0.22.04.1))
+Type "help" for help.
+
+cptwater=# grant all privileges on database cptwater to waterwatch;
+GRANT
+cptwater=# CREATE EXTENSION postgis;
+CREATE EXTENSION
+cptwater=# CREATE EXTENSION postgis_topology;
+CREATE EXTENSION
+
+
+cptwater=# SELECT PostGIS_Version();
+            postgis_version            
+---------------------------------------
+ 3.2 USE_GEOS=1 USE_PROJ=1 USE_STATS=1
+(1 row)
+
+
+

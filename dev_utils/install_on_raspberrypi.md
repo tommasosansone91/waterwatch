@@ -1,6 +1,6 @@
 # Install on Raspberry pi
 
-This procedure gives instructions on how to install the app basic-social-network on a Raspberry pi.
+This procedure gives instructions on how to install the app waterwatch on a Raspberry pi.
 
 > [!IMPORTANT]
 > The Raspberry pi and the PC used for the deploy must be connected to the same LAN network.
@@ -108,7 +108,7 @@ get the git clone link from github:
 > On development, git clone the project by using the github link starting with  `git@`.
 > This one allows to git push the project easily by using github SSH authentication method (SSH key exchange between github and the machine).
 
-    git clone https://github.com/tommasosansone91/basic-social-network.git
+    git clone https://github.com/tommasosansone91/waterwatch.git
 
 
 ## Install Nginx as web server and reverse proxy
@@ -116,7 +116,7 @@ get the git clone link from github:
 This is the *web server* (server the static files) and *reverse proxy* (forwards the dynamic requests to Django).
 
     sudo su
-    cd /var/www/basic-social-network
+    cd /var/www/waterwatch
 
     apt-get update
     apt-get install nginx
@@ -262,7 +262,7 @@ These credentials must be inserted in the `DATABASES` variable in `settings.py` 
 
     sudo su
 
-    cd /var/www/basic-social-network
+    cd /var/www/waterwatch
 
 specifically use python3 to create a virtual environment for the app in folder `venv`
 
@@ -276,7 +276,7 @@ ativate and deactivate the virtual environment only for testing
 ## Install the python modules web framework django
 
     sudo su
-    cd /var/www/basic-social-network
+    cd /var/www/waterwatch
     source venv/bin/activate
 
 > [!WARNING]
@@ -307,7 +307,7 @@ for every package which raises problems, open the file `requirements.txt`, look 
 Once the app framework and postgres are both installed, create the tables required by the app to operate correctly.
 
     sudo su
-    cd /var/www/basic-social-network
+    cd /var/www/waterwatch
     source venv/bin/activate
 
     python manage.py makemigrations
@@ -319,7 +319,7 @@ Once the app framework and postgres are both installed, create the tables requir
 Create superuser in order to access the admin section of the app.
 
     sudo su
-    cd /var/www/basic-social-network
+    cd /var/www/waterwatch
     source venv/bin/activate
 
     python manage.py createsuperuser
@@ -338,14 +338,14 @@ So, every time new static files are developed in `STATICFILES_DIRS` folders, the
 This can be done by running the django command `collectstatic`.
 
     sudo su
-    cd /var/www/basic-social-network
+    cd /var/www/waterwatch
     source venv/bin/activate
 
     python manage.py collectstatic   
 
 ## Configure the app to be hosted on the RPi
 
-In `basic-social-network/settings.py`, insert the IP of the RPi in the list variable `ALLOWED_HOSTS`
+In `waterwatch/settings.py`, insert the IP of the RPi in the list variable `ALLOWED_HOSTS`
 
     ALLOWED_HOSTS = ['<RPi_IP>']
 
@@ -358,7 +358,7 @@ to allow the app to be hosted on any server (not recommanded for security reason
 In the end, test that the app can be on the RPi without throwing any error.
 
     sudo su
-    cd /var/www/basic-social-network
+    cd /var/www/waterwatch
     source venv/bin/activate
 
     python manage.py runserver 0.0.0.0:8004
@@ -370,7 +370,7 @@ In the end, test that the app can be on the RPi without throwing any error.
 ## Configure Nginx to serve the app
 
     sudo su
-    cd /var/www/basic-social-network
+    cd /var/www/waterwatch
     source venv/bin/activate
 
 the default nginx configuration files on the deploy machine are at paths
@@ -390,7 +390,7 @@ of the RPi.
 
 Create the symbolic link
 
-    ln -s /var/www/basic-social-network/infrastructure/nginx/basic-social-network_nginx.conf /etc/nginx/conf.d/
+    ln -s /var/www/waterwatch/infrastructure/nginx/waterwatch_nginx.conf /etc/nginx/conf.d/
 
 Check that the symbolic link is right, run 
 
@@ -398,9 +398,9 @@ Check that the symbolic link is right, run
 
 you should see the symbolic link and check that it is not colored in red
 
-    lrwxrwxrwx 1 root root   86 May  5 13:34 basic-social-network_nginx.conf -> /var/www/basic-social-network/infrastructure/nginx/basic-social-network_nginx.conf
+    lrwxrwxrwx 1 root root   86 May  5 13:34 waterwatch_nginx.conf -> /var/www/waterwatch/infrastructure/nginx/waterwatch_nginx.conf
 
-This allows Nginx to find the app-specific configuration file `infrastructure/nginx/basic-social-network_nginx.conf` in the app directory when it searches for configuration files.
+This allows Nginx to find the app-specific configuration file `infrastructure/nginx/waterwatch_nginx.conf` in the app directory when it searches for configuration files.
 
 ### Check that Nginx is working
 
@@ -414,7 +414,7 @@ restart nginx
 manually launch the app
 
     sudo su
-    cd /var/www/basic-social-network
+    cd /var/www/waterwatch
     source venv/bin/activate
 
     python manage.py runserver 0.0.0.0:8004
@@ -434,7 +434,7 @@ in case of errors, to rollback to the previous configuration, run
 
     sudo su
     cd /etc/nginx/conf.d/
-    rm /etc/nginx/conf.d/basic-social-network_nginx.conf
+    rm /etc/nginx/conf.d/waterwatch_nginx.conf
 
     systemctl stop nginx.service
     systemctl start nginx.service
@@ -449,7 +449,7 @@ In other words, it is a web server designed to run Python web applications that 
 ### install gunicorn
 
     sudo su
-    cd /var/www/basic-social-network
+    cd /var/www/waterwatch
     source venv/bin/activate
 
     pip install gunicorn
@@ -462,25 +462,25 @@ In other words, it is a web server designed to run Python web applications that 
 
 The files in the app folder `infrastructure/wsgi/` must be symbolically linked into the root directory of the project.
 
-    /var/www/basic-social-network/
+    /var/www/waterwatch/
 
 Run
 
     sudo su
-    cd /var/www/basic-social-network
+    cd /var/www/waterwatch
     source venv/bin/activate 
 
 Create the symbolic link
 
-    ln -s /var/www/basic-social-network/infrastructure/wsgi/simplesocial.wsgi /var/www/basic-social-network/
+    ln -s /var/www/waterwatch/infrastructure/wsgi/waterwatch.wsgi /var/www/waterwatch/
 
 Check that the symbolic link is right, run 
 
-    ll /var/www/basic-social-network/
+    ll /var/www/waterwatch/
 
 you should see the symbolic link and check that it is not colored in red
 
-    lrwxrwxrwx  1 root root   74 May  5 15:26 simplesocial.wsgi -> /var/www/basic-social-network/infrastructure/wsgi/simplesocial.wsgi
+    lrwxrwxrwx  1 root root   74 May  5 15:26 waterwatch.wsgi -> /var/www/waterwatch/infrastructure/wsgi/waterwatch.wsgi
 
 
 ### run the app manually via gunicorn
@@ -490,10 +490,10 @@ It binds the app **internal** port (8004) on which the app is exposed by the com
 The `--bind` part tells Gunicorn that it has to listen HTTP requests coming from that port (from the app).
 
     sudo su
-    cd /var/www/basic-social-network
+    cd /var/www/waterwatch
     source venv/bin/activate
 
-    PYTHONPATH=`pwd`/.. venv/bin/gunicorn simplesocial.wsgi:application --bind localhost:8004
+    PYTHONPATH=`pwd`/.. venv/bin/gunicorn waterwatch.wsgi:application --bind localhost:8004
 
 See here why PYTHONPATH=\`pwd\`/.. is required at the start of the line.
 
@@ -511,16 +511,16 @@ http://192.168.1.106:3004/
 > The starting, stopping and starting-at-boot of the app should be managed via systemd and the systemctl syntax, which should be implemented as last step of the app installation process.
 
     sudo su
-    cd /var/www/basic-social-network/
+    cd /var/www/waterwatch/
     source venv/bin/activate
 
-    sudo nohup env PYTHONPATH=`pwd`/.. venv/bin/gunicorn simplesocial.wsgi:application --bind localhost:8004 > /home/pi/basic-social-network.log 2>&1 &
+    sudo nohup env PYTHONPATH=`pwd`/.. venv/bin/gunicorn waterwatch.wsgi:application --bind localhost:8004 > /home/pi/waterwatch.log 2>&1 &
 
 
 #### check that the app is up and running
 
     echo "Grepping the app name from ps aux"
-    echo "$(ps aux | grep 'basic-social-network')"
+    echo "$(ps aux | grep 'waterwatch')"
 
 
 #### exit the machine gracefully
@@ -546,22 +546,22 @@ of the RPi.
 Run
 
     sudo su
-    cd /var/www/basic-social-network/
+    cd /var/www/waterwatch/
     source venv/bin/activate
     
 Create the symbolic link
 
-    ln -s /var/www/basic-social-network/infrastructure/cron/basic-social-network-cron /etc/cron.d/
+    ln -s /var/www/waterwatch/infrastructure/cron/waterwatch-cron /etc/cron.d/
 
 Check that the symbolic link is right, run
 
-    ll /etc/cron.d/basic-social-network-cron
+    ll /etc/cron.d/waterwatch-cron
 
 you should see the symbolic link and check that it is not colored in red
 
-    lrwxrwxrwx 1 root root 46 May  1 10:59 /etc/cron.d/basic-social-network-cron -> /var/www/basic-social-network/infrastructure/cron/basic-social-network-cron
+    lrwxrwxrwx 1 root root 46 May  1 10:59 /etc/cron.d/waterwatch-cron -> /var/www/waterwatch/infrastructure/cron/waterwatch-cron
 
-This allows cron to find the app-specific cron file `infrastructure/cron/basic-social-network-cron` in the app directory.
+This allows cron to find the app-specific cron file `infrastructure/cron/waterwatch-cron` in the app directory.
 
 **NOTE:**
 No `chmod` of the cron files is needed.<br>
@@ -576,7 +576,7 @@ Just enable the execution of the files target of the cron
 
 Create directory to host logs
 
-    sudo mkdir /var/log/basic-social-network/
+    sudo mkdir /var/log/waterwatch/
 
 
 ## Turn the app into a service
@@ -595,37 +595,37 @@ The second one will allow them to be automatically started as service as the mac
 Run
 
     sudo su
-    cd /var/www/basic-social-network/
+    cd /var/www/waterwatch/
     source venv/bin/activate
 
 Create the symbolic links
 
-    ln -s /var/www/basic-social-network/infrastructure/systemd/basic-social-network.service /etc/systemd/system/
-    ln -s /var/www/basic-social-network/infrastructure/systemd/basic-social-network.service /etc/systemd/system/multi-user.target.wants/
+    ln -s /var/www/waterwatch/infrastructure/systemd/waterwatch.service /etc/systemd/system/
+    ln -s /var/www/waterwatch/infrastructure/systemd/waterwatch.service /etc/systemd/system/multi-user.target.wants/
 
 Check that the symbolic link is right, run
 
-    ll /etc/systemd/system/multi-user.target.wants/basic-social-network.service
-    ll /etc/systemd/system/basic-social-network.service
+    ll /etc/systemd/system/multi-user.target.wants/waterwatch.service
+    ll /etc/systemd/system/waterwatch.service
 
 you should see the symbolic link and check that it is not colored in red
 
-    lrwxrwxrwx 1 root root 52 May  1 11:04 /etc/systemd/system/multi-user.target.wants/basic-social-network.service -> /var/www/basic-social-network/infrastructure/systemd/basic-social-network.service
+    lrwxrwxrwx 1 root root 52 May  1 11:04 /etc/systemd/system/multi-user.target.wants/waterwatch.service -> /var/www/waterwatch/infrastructure/systemd/waterwatch.service
     
-    lrwxrwxrwx 1 root root 52 May  1 11:04 /etc/systemd/system/basic-social-network.service -> /var/www/basic-social-network/infrastructure/systemd/basic-social-network.service
+    lrwxrwxrwx 1 root root 52 May  1 11:04 /etc/systemd/system/waterwatch.service -> /var/www/waterwatch/infrastructure/systemd/waterwatch.service
 
 start the service 
 
-    sudo systemctl start basic-social-network.service
+    sudo systemctl start waterwatch.service
 
 and check it is allright
 
-    sudo systemctl status basic-social-network.service
+    sudo systemctl status waterwatch.service
 
 To make this service automatically run on boot
 
     sudo systemctl daemon-reload
-    sudo systemctl enable basic-social-network.service
+    sudo systemctl enable waterwatch.service
 
 In the end, test that the service works after the RPi booting
 
@@ -643,7 +643,7 @@ http://192.168.1.106:3004/
 In case you want to disable the program on boot
 
     sudo systemctl daemon-reload
-    sudo systemctl disable basic-social-network.service
+    sudo systemctl disable waterwatch.service
 
 Documentation https://www.freedesktop.org/software/systemd/man/systemd.service.html
 
@@ -652,11 +652,11 @@ Documentation https://www.freedesktop.org/software/systemd/man/systemd.service.h
 In case you made changes to the service configurations and you want to make them effective
 
     sudo systemctl daemon-reload
-    sudo systemctl restart basic-social-network.service
-    sudo systemctl status basic-social-network.service
+    sudo systemctl restart waterwatch.service
+    sudo systemctl status waterwatch.service
 
 <hr>
 
 ```diff
-+ The app basic-social-network is now successfully installed!
++ The app waterwatch is now successfully installed!
 ```

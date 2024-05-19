@@ -4,7 +4,7 @@ dev_utils/tutorial_big_resources
 
 
 # exclude pycache
-waterwatch/__pycache__/
+waterwatch/__pycache__/*
 
 # Django #
 *.log

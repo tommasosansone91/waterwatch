@@ -4,6 +4,7 @@ django-geojson==4.0.0
 django-leaflet==0.28.3
 et-xmlfile==1.1.0
 geojson==2.5.0
+gunicorn==22.0.0
 numpy==1.23.5
 openpyxl==3.0.10
 pandas==1.5.2

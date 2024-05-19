@@ -10,6 +10,8 @@ from waterwatch.settings import BASE_DIR
 
 from waterwatchapp.models import WaterConsumption
 
+import traceback
+
 # Register your models here.
 class WaterConsumptionAdmin(LeafletGeoAdmin):
     pass
@@ -31,14 +33,27 @@ for index, row in df_excelReader.iterrows():
     Longitude = row['Longitude']
     Latitude = row['Latitude']
 
-    WaterConsumption(Id=Id,
-                     Suburb=Suburb,
-                     NoOfSingleResProp=NoOfSingleResProp,
-                     AvgMonthlyKL=AvgMonthlyKL,
-                     AvgMonthlyKLPredicted=AvgMonthlyKLPredicted,
-                     PredictionAccuracy=PredictionAccuracy,
-                     Month=Month,
-                     Year=Year,
-                     DateTime=DateTime,
-                     geom=Point(Longitude, Latitude)
-                     ).save()
+    # this is to avoid django access the model when it is not created yet
+    # https://stackoverflow.com/a/78504146/7658051
+
+    # from django.db import connection
+    # all_tables = connection.introspection.table_names()
+    # table_name =  'waterwatchapp' + '_' + 'WaterConsumption'.lower()
+    # if table_name in all_tables:
+
+    try:
+        WaterConsumption(Id=Id,
+                        Suburb=Suburb,
+                        NoOfSingleResProp=NoOfSingleResProp,
+                        AvgMonthlyKL=AvgMonthlyKL,
+                        AvgMonthlyKLPredicted=AvgMonthlyKLPredicted,
+                        PredictionAccuracy=PredictionAccuracy,
+                        Month=Month,
+                        Year=Year,
+                        DateTime=DateTime,
+                        geom=Point(Longitude, Latitude)
+                        ).save()
+        
+    except Exception:
+        print(traceback.format_exc())
+        print("Cannot access table WaterConsumption.")

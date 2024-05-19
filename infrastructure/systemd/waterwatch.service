@@ -41,7 +41,7 @@ After=network.target
 
 [Service]
 WorkingDirectory=/var/www/waterwatch/
-ExecStart=/var/www/waterwatch/venv/bin/gunicorn waterwatch.wsgi:application --bind localhost:8004
+ExecStart=/var/www/waterwatch/venv/bin/gunicorn waterwatch.wsgi:application --bind localhost:8005
 
 StandardOutput=file:/var/log/waterwatch/waterwatch-stdout.log
 StandardError=file:/var/log/waterwatch/waterwatch-stderr.log

@@ -130,7 +130,12 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+# USE_TZ = True
+USE_TZ = False
+# made onlyt o turn off the waringn
+# RuntimeWarning: DateTimeField .DateTime received a naive datetime  while time zone support is active.
+
+# https://stackoverflow.com/questions/18622007/runtimewarning-datetimefield-received-a-naive-datetime
 
 
 # Static files (CSS, JavaScript, Images)

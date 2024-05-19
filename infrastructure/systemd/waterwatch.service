@@ -1,0 +1,63 @@
+[Unit]
+# the first line must be 
+# [Unit]
+
+#------------------------------------------------------------------------
+
+# what to do with this file
+
+# this file must be named
+# <target_app>.service
+# and deployed to
+# /etc/systemd/system 
+# to be ran on boot.
+
+# Once in the folder make the file executable 
+# sudo chmod +x <target_app>.service
+
+# This will start the service but will not run it on boot.
+# sudo systemctl start <target_app>.service
+
+# To make your service automatically run on boot
+# sudo systemctl daemon-reload
+# sudo systemctl enable <target_app>.service
+
+# Run this in terminal to disable the program on boot
+# sudo systemctl daemon-reload
+# sudo systemctl disable <target_app>.service
+
+# Documentation https://www.freedesktop.org/software/systemd/man/systemd.service.html
+
+#------------------------------------------------------------------------
+
+Description=service for starting the app waterwatch on RPi
+
+After=network.target
+# This will not start execution of this file until the network connection is made
+# It can be replaced with other parameters of your choosing
+# e.g.
+# After=syslog.target
+
+
+[Service]
+WorkingDirectory=/var/www/waterwatch/
+ExecStart=/var/www/waterwatch/venv/bin/gunicorn waterwatch.wsgi:application --bind localhost:8004
+
+StandardOutput=file:/var/log/waterwatch/waterwatch-stdout.log
+StandardError=file:/var/log/waterwatch/waterwatch-stderr.log
+#Optional: Saves the output and error log of the terminal to a .log file in a directory of your choosing.
+
+Restart=always
+# Automatically restart on kill
+
+KillSignal=SIGQUIT
+# Optional: To cleanly end the file on stop use this command. This sends a terminal interrupt command on the executable script
+# alternatively:
+# Restart=on-failure
+
+Type=notify
+NotifyAccess=all
+
+
+[Install]
+WantedBy=multi-user.target

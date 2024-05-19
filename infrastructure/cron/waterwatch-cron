@@ -1,0 +1,13 @@
+#-------------------------
+# cron per waterwatch
+#-------------------------
+
+# sudo vim /etc/cron.d/waterwatch-cron
+
+
+
+
+# tests
+# -------
+
+# * * * * * root cd /home/pi/;touch hello_time.txt;echo "hello the time is $(date)" >> hello_time.txt

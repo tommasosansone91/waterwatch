@@ -233,6 +233,43 @@ These credentials must be inserted in the `DATABASES` variable in `settings.py` 
         }
     }
 
+## Install Postgis
+
+### Install Postgis
+
+Access any postgresql database with any user
+
+    psql -h localhost -U postgres -d postgres
+
+Check your postgresql version via
+
+    SELECT VERSION()    
+
+Supposing version is `X`, run
+
+    sudo apt-get install postgis postgresql-X-postgis-Y
+
+### Create Postgis extension in Postgresql
+
+Only superusers can install extensions.
+
+Become user `postgres`
+
+    sudo -i -u postgres
+
+access the app database
+
+    psql waterwatch
+
+give the privileges to the main user
+
+    grant all privileges on database waterwatch to waterwatch_main;
+
+create extensions
+
+    CREATE EXTENSION postgis;
+    CREATE EXTENSION postgis_topology;
+
 ## Install Python
 
     sudo add-apt-repository ppa:deadsnakes/ppa

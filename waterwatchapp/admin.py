@@ -12,36 +12,39 @@ from waterwatchapp.models import WaterConsumption
 
 import traceback
 
-# Register your models here.
-class WaterConsumptionAdmin(LeafletGeoAdmin):
-    pass
 
-admin.site.register(WaterConsumption, WaterConsumptionAdmin)
+try:
 
-df_excelReader = pd.read_excel(BASE_DIR / 'tabledata_source/waterwatch_clean2.xlsx')
+    # Register your models here.
+    class WaterConsumptionAdmin(LeafletGeoAdmin):
+        pass
 
-for index, row in df_excelReader.iterrows():
-    Id = index
-    Suburb = row['Suburb']
-    NoOfSingleResProp = row['Number of single-residential properties_number']
-    AvgMonthlyKL = row['Oct 2017\nkl/month']
-    AvgMonthlyKLPredicted = 0
-    PredictionAccuracy = 0
-    Month = row ['Month']
-    Year = row['Year']
-    DateTime = datetime.now()
-    Longitude = row['Longitude']
-    Latitude = row['Latitude']
+    admin.site.register(WaterConsumption, WaterConsumptionAdmin)
 
-    # this is to avoid django access the model when it is not created yet
-    # https://stackoverflow.com/a/78504146/7658051
+    df_excelReader = pd.read_excel(BASE_DIR / 'tabledata_source/waterwatch_clean2.xlsx')
 
-    # from django.db import connection
-    # all_tables = connection.introspection.table_names()
-    # table_name =  'waterwatchapp' + '_' + 'WaterConsumption'.lower()
-    # if table_name in all_tables:
+    for index, row in df_excelReader.iterrows():
+        Id = index
+        Suburb = row['Suburb']
+        NoOfSingleResProp = row['Number of single-residential properties_number']
+        AvgMonthlyKL = row['Oct 2017\nkl/month']
+        AvgMonthlyKLPredicted = 0
+        PredictionAccuracy = 0
+        Month = row ['Month']
+        Year = row['Year']
+        DateTime = datetime.now()
+        Longitude = row['Longitude']
+        Latitude = row['Latitude']
 
-    try:
+        # this is to avoid django access the model when it is not created yet
+        # https://stackoverflow.com/a/78504146/7658051
+
+        # from django.db import connection
+        # all_tables = connection.introspection.table_names()
+        # table_name =  'waterwatchapp' + '_' + 'WaterConsumption'.lower()
+        # if table_name in all_tables:
+
+
         WaterConsumption(Id=Id,
                         Suburb=Suburb,
                         NoOfSingleResProp=NoOfSingleResProp,

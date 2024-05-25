@@ -57,6 +57,6 @@ try:
                         geom=Point(Longitude, Latitude)
                         ).save()
         
-    except Exception:
-        print(traceback.format_exc())
-        print("Cannot access table WaterConsumption.")
+except Exception:
+    print(traceback.format_exc())
+    print("Cannot access table WaterConsumption.")

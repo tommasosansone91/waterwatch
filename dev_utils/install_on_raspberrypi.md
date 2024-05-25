@@ -364,7 +364,7 @@ Create superuser in order to access the admin section of the app.
 ## Collect static files
 
 Custom static files (images, javascript and css - i.e. everything useful for beautifying the frontend) are developed in the static folders defined in the list variable `STATICFILES_DIRS` in settings.<br>
-In this app, one of these flders is is `static`.
+In this app, one of these folders is is `static`.
 
 In production (i.e. when `DEBUG = False`), the static files must be served by the web server (e.g. nginx).
 
@@ -379,6 +379,9 @@ This can be done by running the django command `collectstatic`.
     source venv/bin/activate
 
     python manage.py collectstatic   
+
+> [!TIP]
+> Check that the absolute path defined by `STATIC_ROOT` is included in `.gitignore`, so excluded from versioning.
 
 ## Configure the app to be hosted on the RPi
 

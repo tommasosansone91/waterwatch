@@ -8,6 +8,9 @@ waterwatch/__pycache__/
 waterwatchapp/__pycache__/
 waterwatchapp/migrations/__pycache__/
 
+# exclude statifiles
+staticfiles/
+
 # Django #
 *.log
 *.pot

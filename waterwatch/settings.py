@@ -153,6 +153,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
 # /home/tommaso/tommaso03/coding_projects/corsi_udemy/create-smart-maps-in-python-and-leaflet/waterwatch/static/
 
+# my add
+# Custom static files (images, javascript and css - i.e. everything useful for beautifying the frontend) 
+# are developed in the static folders defined in the list variable `STATICFILES_DIRS` in settings.
+STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'static')]
 
 LEAFLET_CONFIG = {
 

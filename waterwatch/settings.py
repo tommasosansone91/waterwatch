@@ -156,7 +156,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # my add
 # Custom static files (images, javascript and css - i.e. everything useful for beautifying the frontend) 
 # are developed in the static folders defined in the list variable `STATICFILES_DIRS` in settings.
-STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
 
 STATICSTORAGE = "Whitenoise.storage.CompressedManifestStaticFilesStorage" #zips up static files
 

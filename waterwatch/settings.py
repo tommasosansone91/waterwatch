@@ -146,7 +146,7 @@ USE_TZ = False
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # change made by the teacher but not recommended with django's new syntax
@@ -157,6 +157,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Custom static files (images, javascript and css - i.e. everything useful for beautifying the frontend) 
 # are developed in the static folders defined in the list variable `STATICFILES_DIRS` in settings.
 STATICFILES_DIRS = [ os.path.join(BASE_DIR, 'static')]
+
+STATICSTORAGE = "Whitenoise.storage.CompressedManifestStaticFilesStorage" #zips up static files
+
 
 LEAFLET_CONFIG = {
 

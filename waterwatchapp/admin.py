@@ -11,6 +11,7 @@ from waterwatch.settings import BASE_DIR
 from waterwatchapp.models import WaterConsumption
 
 import traceback
+import os
 
 
 try:
@@ -21,7 +22,7 @@ try:
 
     admin.site.register(WaterConsumption, WaterConsumptionAdmin)
 
-    df_excelReader = pd.read_excel(BASE_DIR / 'tabledata_source/waterwatch_clean2.xlsx')
+    df_excelReader = pd.read_excel( os.path.join(BASE_DIR, 'tabledata_source/waterwatch_clean2.xlsx') )
 
     for index, row in df_excelReader.iterrows():
         Id = index

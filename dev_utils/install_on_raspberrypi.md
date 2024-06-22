@@ -116,6 +116,12 @@ However, this is a private repository, so the only way to git clone it is to use
 > In order todo this, you must have created a ssh key of exchange between github and deploy machine for **root user**. So the file containing the key has to be in the directory of user root.
 > Redo the procedure upwards, but this time save the key in file `/root/.ssh/id_ed25519_sudo`.
 
+> [!TIP]
+> In case you have problems of pulling with git, make the repo public and change the remote url to the one starting with https.
+
+    git remote set-url origin https://github.com/tommasosansone91/waterwatch.git
+
+
 ## Install Nginx as web server and reverse proxy
 
 This is the *web server* (server the static files) and *reverse proxy* (forwards the dynamic requests to Django).

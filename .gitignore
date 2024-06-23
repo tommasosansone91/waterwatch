@@ -9,7 +9,7 @@ waterwatchapp/__pycache__/
 waterwatchapp/migrations/__pycache__/
 
 # exclude statifiles
-# staticfiles/
+staticfiles/
 
 # Django #
 *.log
